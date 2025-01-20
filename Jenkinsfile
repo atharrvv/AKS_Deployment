@@ -51,9 +51,9 @@ pipeline {
                         sh  'az aks get-credentials --resource-group terra-resource --name dilli --overwrite-existing'
                          sh """
                          kubectl create secret generic db-credentials \
-                         --from-literal=DB_URL=${DB_URL} \
-                         --from-literal=DB_USER=${DB_USER} \
-                         --from-literal=DB_PASSWORD=${DB_PASSWORD}
+                         --from-literal=DB_URL=${john_url} \
+                         --from-literal=DB_USER=${john_username} \
+                         --from-literal=DB_PASSWORD=${john_password}
                          """
                         sh 'kubectl apply -f ./yamlat/backend.yaml'
                     }
