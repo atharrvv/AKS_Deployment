@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      containers:
+      - name: react-app
+        image: billgates.azurecr.io/frontend
+        ports:
+        - containerPort: 80  # Set this to 80 since the app is served on port 80 via Nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-app-service
+spec:
+  selector:
+    app: react-app
+  ports:
+    - protocol: TCP
+      port: 80  # Exposed service port
+      targetPort: 80  # Target port inside the container (80 for Nginx)
+  type: LoadBalancer
