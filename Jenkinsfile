@@ -50,7 +50,7 @@ pipeline {
                     withCredentials([azureServicePrincipal('azure_principle')]) {
                         sh  'az aks get-credentials --resource-group terra-resource --name dilli --overwrite-existing'
                          sh """
-                         kubectl create secret generic db-credentials \
+                         kubectl create secret db-credentials \
                          --from-literal=DB_URL=${DB_URL} \
                          --from-literal=DB_USER=${DB_USER} \
                          --from-literal=DB_PASSWORD=${DB_PASSWORD}
