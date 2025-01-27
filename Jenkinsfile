@@ -44,17 +44,29 @@ pipeline {
                 }
             }
         }
+        stage ('k8s Secrets creating') {
+            steps {
+                script {
+                    sh """
+                    kubectl create secret generic db-credentials \
+                    --from-literal=DB_URL=${DB_URL} \
+                    --from-literal=DB_USER=${DB_USER} \
+                    --from-literal=DB_PASSWORD=${DB_PASSWORD}
+                    """
+                }
+            }
+        }
         stage ('Backend Apply') {
             steps {
                 script {
                     withCredentials([azureServicePrincipal('azure_principle')]) {
                         sh  'az aks get-credentials --resource-group terra-resource --name dilli --overwrite-existing'
-                         sh """
-                         kubectl create secret generic db-credentials \
-                         --from-literal=DB_URL=${DB_URL} \
-                         --from-literal=DB_USER=${DB_USER} \
-                         --from-literal=DB_PASSWORD=${DB_PASSWORD}
-                         """
+                         // sh """
+                         // kubectl create secret generic db-credentials \
+                         // --from-literal=DB_URL=${DB_URL} \
+                         // --from-literal=DB_USER=${DB_USER} \
+                         // --from-literal=DB_PASSWORD=${DB_PASSWORD}
+                         // """
                         sh 'kubectl apply -f ./yamlat/backend.yaml'
                     }
                 }
